@@ -1,0 +1,22 @@
+{
+  "name": "node.js",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChristianCorciu/MyContacts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChristianCorciu/MyContacts/issues"
+  },
+  "homepage": "https://github.com/ChristianCorciu/MyContacts#readme",
+  "description": "",
+  "dependencies": {
+    "Express": "^3.0.1"
+  }
+}
