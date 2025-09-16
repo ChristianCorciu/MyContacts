@@ -5,6 +5,7 @@ import authRoutes from './server/routes/auth.js';
 import requireAuth from './server/middleware/auth.middleware.js';
 import errorHandler from "./server/middleware/error.middleware.js";
 import { setupSwagger } from "./server/config/swagger.js";
+import contactsRoutes from "./server/routes/contact.js";
 
 
 
@@ -15,6 +16,9 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use('/auth', authRoutes);
+
+app.use("/contacts", contactsRoutes);
+
 setupSwagger(app);
 app.use(errorHandler);
 
