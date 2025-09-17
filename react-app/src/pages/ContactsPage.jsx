@@ -66,7 +66,7 @@ const ContactsPage = () => {
             await axios.delete(`http://localhost:3000/contacts/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            // Mettre à jour l'état en filtrant le contact supprimé
+           
             setContacts(contacts.filter(contact => contact._id !== id));
         } catch (err) {
             setError('Impossible de supprimer le contact.');
@@ -76,7 +76,7 @@ const ContactsPage = () => {
         const newName = prompt("Nouveau nom :", contact.name);
         const newPhone = prompt("Nouveau téléphone :", contact.phone);
 
-        if (newName === null || newPhone === null) { // L'utilisateur a cliqué sur "Annuler"
+        if (newName === null || newPhone === null) { 
             return;
         }
 
@@ -87,7 +87,6 @@ const ContactsPage = () => {
             const response = await axios.put(`http://localhost:3000/contacts/${contact._id}`, updatedFields, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            // Mettre à jour l'état en remplaçant l'ancien contact par le nouveau
             setContacts(contacts.map(c => (c._id === contact._id ? response.data : c)));
         } catch (err) {
             setError(err.response?.data?.message || 'Impossible de modifier le contact.');
@@ -113,7 +112,6 @@ const ContactsPage = () => {
                     contacts.map(contact => (
                         <li key={contact._id}>
                             <strong>{contact.name}</strong> - {contact.email} - {contact.phone}
-                            {/* --- AJOUT DES BOUTONS --- */}
                             <button onClick={() => handleEditContact(contact)} style={{ marginLeft: '10px' }}>Modifier</button>
                             <button onClick={() => handleDeleteContact(contact._id)}>Supprimer</button>
                         </li>

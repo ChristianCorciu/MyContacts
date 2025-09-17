@@ -54,9 +54,7 @@ router.delete('/:id', async (req, res) => {
 
         if (!contact) {
             return res.status(404).json({ message: 'Contact non trouvé.' });
-        }
-
-        // Vérifier que l'utilisateur possède bien le contact
+        }// Vérifier que l'utilisateur possède bien le contact
         if (contact.user.toString() !== req.user.id) {
             return res.status(401).json({ message: 'Action non autorisée.' });
         }
@@ -77,8 +75,6 @@ router.delete('/:id', async (req, res) => {
  */
 router.put('/:id', async (req, res) => {
     const { name, email, phone } = req.body;
-
-    // Construire l'objet de mise à jour
     const contactFields = {};
     if (name) contactFields.name = name;
     if (email) contactFields.email = email;
@@ -90,8 +86,6 @@ router.put('/:id', async (req, res) => {
         if (!contact) {
             return res.status(404).json({ message: 'Contact non trouvé.' });
         }
-
-        // Vérifier que l'utilisateur possède bien le contact
         if (contact.user.toString() !== req.user.id) {
             return res.status(401).json({ message: 'Action non autorisée.' });
         }
@@ -99,7 +93,7 @@ router.put('/:id', async (req, res) => {
         contact = await Contact.findByIdAndUpdate(
             req.params.id,
             { $set: contactFields },
-            { new: true } // Pour renvoyer le document mis à jour
+            { new: true } 
         );
  res.json(contact);
 

@@ -7,7 +7,7 @@ const requireAuth = (req, res, next) => {
     const { authorization } = req.headers;
 
     if (!authorization) {
-        return res.status(401).json({ message: 'Token d\'autorisation requis' });
+        return res.status(401).json({ message: 'Token autorisation requis' });
     }
 
     const token = authorization.split(' ')[1];
