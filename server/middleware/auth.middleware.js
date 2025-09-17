@@ -1,16 +1,26 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config(); 
 
 const requireAuth = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return res.status(401).json({ message: "Unauthorized" });
+    const { authorization } = req.headers;
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(403).json({ message: "Forbidden" });
-    req.user = decoded;
-    next();
-  });
+    if (!authorization) {
+        return res.status(401).json({ message: 'Token d\'autorisation requis' });
+    }
+
+    const token = authorization.split(' ')[1];
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = { id: decoded.id }; 
+        
+        next();
+    } catch (error) {
+        console.error("Erreur de vérification du token:", error.message);
+        res.status(403).json({ message: 'Token invalide ou expiré' });
+    }
 };
 
 export default requireAuth;
-
-    

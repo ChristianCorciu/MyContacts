@@ -1,0 +1,90 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const ContactsPage = () => {
+    const [contacts, setContacts] = useState([]);
+    const [newContact, setNewContact] = useState({ name: '', email: '', phone: '' });
+    const [error, setError] = useState('');
+
+    const fetchContacts = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setError("Vous n'êtes pas connecté.");
+                return;
+            }
+            const response = await axios.get('http://localhost:3000/contacts', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setContacts(response.data);
+        } catch (err) {
+            setError('Impossible de charger les contacts.');
+        }
+    };
+
+    useEffect(() => {
+        fetchContacts();
+    }, []);
+
+    const handleNewContactChange = (e) => {
+        setNewContact({ ...newContact, [e.target.name]: e.target.value });
+    };
+
+    const handleAddContact = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        const formData = new FormData(e.target);
+        const contactData = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+        };
+
+        console.log('Données lues directement du formulaire :', contactData);
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.post('http://localhost:3000/contacts', contactData, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setContacts([...contacts, response.data]);
+            setNewContact({ name: '', email: '', phone: '' });
+
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || 'Une erreur est survenue.';
+            setError(`Impossible d'ajouter le contact: ${errorMessage}`);
+        }
+    };
+
+    return (
+        <div>
+            <h2>Mes Contacts</h2>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+
+            <h3>Ajouter un contact</h3>
+            <form onSubmit={handleAddContact}>
+                <input type="text" name="name" placeholder="Nom" value={newContact.name} onChange={handleNewContactChange} required />
+                <input type="email" name="email" placeholder="Email" value={newContact.email} onChange={handleNewContactChange} required />
+                <input type="text" name="phone" placeholder="Téléphone" value={newContact.phone} onChange={handleNewContactChange} required />
+                <button type="submit">Ajouter</button>
+            </form>
+
+            <h3>Liste des contacts</h3>
+            <ul>
+                {contacts.length > 0 ? (
+                    contacts.map(contact => (
+                        <li key={contact._id}>
+                            <strong>{contact.name}</strong> - {contact.email} - {contact.phone}
+                        </li>
+                    ))
+                ) : (
+                    <li>Aucun contact.</li>
+                )}
+            </ul>
+        </div>
+    );
+};
+
+export default ContactsPage;

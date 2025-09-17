@@ -1,28 +1,30 @@
-import mongoose from "mongoose";
-const contactSchema = new mongoose.Schema(
-  {
-    prenom: {
-      type: String,
-      required: [true, "Le prénom est obligatoire"],
-      trim: true,
+import mongoose from 'mongoose';
+
+const contactSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
-    nom: {
-      type: String,
-      required: [true, "Le nom est obligatoire"],
-      trim: true,
+    name: {
+        type: String,
+        required: true
     },
-    telephone: {
-      type: String,
-      required: [true, "Le numéro de téléphone est obligatoire"],
-      unique: true,
-      match: [
-        /^[0-9+\-\s()]{6,20}$/,
-        "Format du numéro de téléphone invalide",
-      ],
+    email: {
+        type: String,
+        required: true
     },
-  },
-  { timestamps: true }
-);
-const Contact = mongoose.model("Contact", contactSchema);
+    phone: {
+        type: String,
+        required: [true, 'Le numéro de téléphone est obligatoire.'],
+        unique: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+const Contact = mongoose.model('Contact', contactSchema);
 
 export default Contact;

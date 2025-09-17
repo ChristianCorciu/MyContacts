@@ -8,7 +8,6 @@ const SALT_ROUNDS = 10;
 dotenv.config();    
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
-// Inscription
 router.post('/register', async (req, res) => {
   const { email, password, name } = req.body;   
     if (!email || !password || !name) {

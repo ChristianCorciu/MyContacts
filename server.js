@@ -6,14 +6,16 @@ import requireAuth from './server/middleware/auth.middleware.js';
 import errorHandler from "./server/middleware/error.middleware.js";
 import { setupSwagger } from "./server/config/swagger.js";
 import contactsRoutes from "./server/routes/contact.js";
-
-
+import cors from 'cors'; 
 
 
 dotenv.config();
-
-
 const app = express();
+
+
+
+
+app.use(cors());
 app.use(express.json());
 app.use('/auth', authRoutes);
 
