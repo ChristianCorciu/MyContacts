@@ -7,7 +7,7 @@ const HomePage = () => {
             <h1> App My contact Christian Corciu </h1>
             
             <nav>
-                <Link to="/login">Login</Link>
+                <Link to="/register">Inscription</Link>
             </nav>
         </div>
     );
