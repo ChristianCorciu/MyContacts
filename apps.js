@@ -1,17 +1,27 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./client/src/LoginPage.js";
-import RegisterPage from "./client/src/RegisterPage.js";
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
 
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    </Router>
-  );
-}
+import authRoutes from './server/routes/auth.js';
+import requireAuth from './server/middleware/auth.middleware.js';
+import errorHandler from "./server/middleware/error.middleware.js";
+import { setupSwagger } from "./server/config/swagger.js";
+import contactsRoutes from "./server/routes/contact.js";
 
-export default App;
+dotenv.config();
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use('/auth', authRoutes);
+app.use('/contacts', contactsRoutes);
+
+setupSwagger(app);
+app.use(errorHandler);
+
+app.get('/protected', requireAuth, (req, res) => {
+  res.json({ message: 'Accès autorisé', user: req.user });
+});
+
+export default app;
